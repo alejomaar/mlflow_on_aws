@@ -10,6 +10,7 @@ python-dotenv = "*"
 ipykernel = "*"
 scikit-learn = "*"
 pandas = "*"
+mlflow = "*"
 
 [dev-packages]
 
