@@ -12,6 +12,7 @@ scikit-learn = "*"
 pandas = "*"
 mlflow = "*"
 hyperopt = "*"
+xgboost = "*"
 
 [dev-packages]
 
