@@ -13,6 +13,7 @@ pandas = "*"
 mlflow = "*"
 hyperopt = "*"
 xgboost = "*"
+seaborn = "*"
 
 [dev-packages]
 
