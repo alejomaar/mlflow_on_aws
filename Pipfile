@@ -11,6 +11,7 @@ ipykernel = "*"
 scikit-learn = "*"
 pandas = "*"
 mlflow = "*"
+hyperopt = "*"
 
 [dev-packages]
 
