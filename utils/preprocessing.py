@@ -7,9 +7,9 @@ from sklearn.preprocessing import RobustScaler
 from utils.model_io import dump_pickle, load_pickle
 
 
-def read(filename:str)->pd.DataFrame:
+def read(filename:str,data_path:str='data/raw/')->pd.DataFrame:
     "Load a csv file from the file path, returning a DataFrame."
-    df = pd.read_csv(f'../data/raw/{filename}')
+    df = pd.read_csv(f'{data_path}{filename}')
     
     df = df[df.ocean_proximity!='ISLAND'] 
 
@@ -29,24 +29,14 @@ def prepare(df:pd.DataFrame, fit: bool = False, data_path:str='data/preprocess/'
         scaler = RobustScaler().set_output(transform="pandas")
         df_scaled = scaler.fit_transform(df[numerical])
         
+        
         dicts = df[categorical].to_dict(orient='records')
         dv = DictVectorizer()
         ohe = pd.DataFrame(dv.fit_transform(dicts).todense(), columns=dv.feature_names_)
          
-        df_prepare = pd.concat([ohe,df_scaled,df[target]], axis=1)
-        
-        dump_pickle(dv,f'{data_path}/dv.pkl')
-        dump_pickle(scaler,f'{data_path}/scaler.pkl')
-        return df_prepare
-        
-    else:
-        dv = load_pickle(f'{data_path}/dv.pkl')
-        scaler = load_pickle(f'{data_path}/scaler.pkl')
-        
-        df_scaled = scaler.transform(df[numerical])
-        
-        dicts = df[categorical].to_dict(orient='records')
-        ohe = pd.DataFrame(dv.transform(dicts).todense(), columns=dv.feature_names_)
 
-        df_prepare = pd.concat([ohe,df_scaled,df[target]], axis=1)
+        df_prepare = pd.concat([ohe.reset_index(drop=True),df_scaled.reset_index(drop=True),df[target].reset_index(drop=True)], axis=1)
+        
+        dump_pickle(dv,f'{data_path}dv.pkl')
+        dump_pickle(scaler,f'{data_path}scaler.pkl')
         return df_prepare
