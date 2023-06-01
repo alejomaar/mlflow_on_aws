@@ -1,0 +1,2 @@
+CONNECTION = mlflow server --backend-store-uri postgresql://{USER_NAME}:{PASSWORD}@{HOST}:5432/{DATABASE_NAME} --default-artifact-root s3://{S3_BUCKET_NAME} -p 5000 -h 0.0.0.0
+TRACKING_URI = TRACKING_URI
