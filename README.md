@@ -22,12 +22,14 @@
 
 - [Problem Statement](#problem_statement)
 - [Idea / Solution](#idea)
-- [Dependencies / Limitations](#limitations)
-- [Future Scope](#future_scope)
+- [Technology Stack](#tech_stack)
+- [Deployment on AWS](#deployment)
+  - [Creating an EC2 Instance](#ec2)
+  - [Configuring PostgreSQL Database](#postgresql)
+  - [Configuring S3 bucket](#s3)
+  - [Running MLFlow Server on EC2](#mlflow_run)
 - [Setting up a local environment](#getting_started)
 - [Usage](#usage)
-- [Technology Stack](#tech_stack)
-- [Contributing](../CONTRIBUTING.md)
 - [Authors](#authors)
 - [Acknowledgments](#acknowledgments)
 
@@ -48,6 +50,48 @@ The idea is to demonstrate how MLFlow can be used in a collaborative team settin
 - [Matplotlib & Seaborn]() -Visualization
 - [MLFlow]() - Experiment Tracking
 - [AWS]() - Cloud
+
+
+## 🚀 Deployment on AWS <a name="deployment"></a>
+
+### Creating an EC2 Instance <a name="ec2"></a>
+To deploy MLFlow on AWS, you'll first need to create an EC2 instance. Here are the steps:
+
+* Log in to the AWS Management Console.
+* Navigate to the EC2 service.
+* Click on "Launch Instance" to start the instance creation process.
+* Choose an Amazon Machine Image (AMI) that suits your requirements. 
+* Configure security groups to allow inbound traffic on the desired ports (e.g., SSH, HTTP, HTTPS).
+
+### Configuring PostgreSQL Database <a name="postgresql"></a>
+To use PostgreSQL as the backend store for MLFlow, you'll need to configure a PostgreSQL database. Follow these steps:
+
+* Create a PostgreSQL database in Amazon RDS service.
+* Configure the setting according to your requirements
+* Configure security groups to allow inbound traffic on the desired ports (e.g., SSH, HTTP, HTTPS).
+* Make note of the PostgreSQL database URI, which should include the username, password, host, port, and database name.
+
+### Configuring S3 bucket <a name="s3"></a>
+Follow these steps to configure the S3 bucket:
+
+* Navigate to the S3 service.
+* Create a new S3 bucket for storing MLFlow artifacts.
+* Copy your S3 URI
+
+### Running MLFlow Server on EC2 <a name="mlflow_run"></a>
+Now, we're ready to run the MLFlow server on the EC2 instance:
+
+* Connect to the EC2 instance via SSH.
+* Update the packages in your virtual machine 
+* install python and pip in your machine
+* Run this command against your bash 
+```bash
+mlflow server --backend-store-uri postgresql://{USER_NAME}:{PASSWORD}@{HOST}:5432/{DATABASE_NAME} --default-artifact-root s3://{S3_BUCKET_NAME} -p 5000 -h 0.0.0.0
+```
+* You can now access the MLFlow server by navigating to `http://<EC2_INSTANCE_PUBLIC_IP>:5000` in your web browser.
+
+
+Remember to configure security groups and network settings to allow inbound traffic on the specified port for accessing the MLFlow server.
 
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
@@ -95,12 +139,12 @@ pip install -r requirements.txt
 
 4. Run MLFlow:
 
-**Run Local:**
+**Run Locally:**
 
 ```bash
 mlflow server --backend-store-uri sqlite:///mlflow.db --default-artifact-root ./mlflow/artifacts --host 0.0.0.0 -p 4600
 ```
-**Run Production:**
+**Run in Production:**
  
 You will need to have a EC2 instance already running on AWS, so you need run this command into the instance. (`Check the deployment section for more information`)
 
@@ -116,8 +160,8 @@ mlflow server --backend-store-uri postgresql://{USER_NAME}:{PASSWORD}@{HOST}:543
 
 ## 🎈 Usage <a name="usage"></a>
 
-- `run notebooks` - Each notebook propose a different approach for predict housing prices on California dataset, I recommend you run all notebooks for check out all the mage.
-- `experiment` - Change the parameters in your experiments, you could add more images, export more artifacts and of course apply more feature engineering for archiving better results. 
+- `Run Notebooks`: Each notebook presents a different approach to predict housing prices on the California dataset. It is recommended to run all the notebooks to explore the different models and compare their results.
+- `Experiment`: Modify the parameters in your experiments. You can add more visualizations, export additional artifacts, and apply different feature engineering techniques to achieve better results.
 
 
 ## ✍️ Authors <a name = "authors"></a>
