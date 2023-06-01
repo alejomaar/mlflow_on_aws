@@ -40,3 +40,16 @@ def prepare(df:pd.DataFrame, fit: bool = False, data_path:str='data/preprocess/'
         dump_pickle(dv,f'{data_path}dv.pkl')
         dump_pickle(scaler,f'{data_path}scaler.pkl')
         return df_prepare
+    
+    else:
+        dv = load_pickle(f'{data_path}dv.pkl')
+        scaler = load_pickle(f'{data_path}scaler.pkl')
+        
+        df_scaled = scaler.fit_transform(df[numerical])
+        
+        dicts = df[categorical].to_dict(orient='records')
+        ohe = pd.DataFrame(dv.transform(dicts).todense(), columns=dv.feature_names_)
+        
+        df_prepare = pd.concat([ohe.reset_index(drop=True),df_scaled.reset_index(drop=True),df[target].reset_index(drop=True)], axis=1)
+        
+        return df_prepare
